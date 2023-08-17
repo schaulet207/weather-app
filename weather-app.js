@@ -2,9 +2,9 @@
 var city;
 
 // Variables for HTML elements to allow searching cities
-var locationInput = document.getElementById('location');
-var weatherDataContainer = document.getElementById('weatherData');
-weatherDataContainer.innerHTML = '<p>Loading...</p>'; // Display loading message
+var locationInput = document.getElementById("location");
+var weatherDataContainer = document.getElementById("weatherData");
+weatherDataContainer.innerHTML = "<p>Loading...</p>"; // Display loading message
 
 // Fetch weather data using targetLocation
 async function getWeatherData(targetLocation) {
@@ -24,6 +24,33 @@ async function getWeatherData(targetLocation) {
   }
 }
 
+// Change the date-time string returned from weatherData.location.localtime to a more readable format
+function formatDate(apiDateString) {
+  const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  const daysOfWeek = [
+    'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
+  ];
+
+  const date = new Date(apiDateString);
+
+  const dayOfWeek = daysOfWeek[date.getDay()];
+  const month = months[date.getMonth()];
+  const day = date.getDate();
+  const year = date.getFullYear();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const period = hours >= 12 ? 'pm' : 'am';
+  const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
+
+  const formattedDate = `${dayOfWeek}, ${month} ${day}${getDaySuffix(day)} ${year} ${formattedHours}:${padZero(minutes)}${period}`;
+
+  return formattedDate;
+}
+
 // Process weather data from weatherapi.com
 function processWeatherData(weatherData) {
   if (!weatherData) {
@@ -33,18 +60,68 @@ function processWeatherData(weatherData) {
   const processedData = {
     allData: weatherData,
     location: weatherData.location.name,
-    temperature: weatherData.current.temp_c,
+    temperature: weatherData.current.temp_f,
     condition: weatherData.current.condition.text,
-    currentTime: weatherData.location.localtime,
+    currentTime: formatDate(weatherData.location.localtime), // Format the current time
   };
+
   weatherDataContainer.innerHTML = `
-  <h2>Weather for ${weatherData.location.name}</h2>
-  <p>Temperature: ${weatherData.current.temp_c}°C</p>
-  <p>Condition: ${weatherData.current.condition.text}</p>
-  <p> ${weatherData.location.localtime}</p>
-`;
+    <h2>${processedData.currentTime}</h2>
+    <h1>${weatherData.location.name}, ${weatherData.location.region}</h1>
+    <p>Temperature: ${weatherData.current.temp_f}°F</p>
+    <p>Condition: ${weatherData.current.condition.text}</p>
+  `;
 
   return processedData;
+}
+
+// Helper function to format date and time
+function formatDate(apiDateString) {
+  const months = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  const daysOfWeek = [
+    'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
+  ];
+
+  const date = new Date(apiDateString);
+
+  const dayOfWeek = daysOfWeek[date.getDay()];
+  const month = months[date.getMonth()];
+  const day = date.getDate();
+  const year = date.getFullYear();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const period = hours >= 12 ? 'pm' : 'am';
+  const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
+
+  const formattedDate = `${dayOfWeek}, ${month} ${day}${getDaySuffix(day)} ${year} ${formattedHours}:${padZero(minutes)}${period}`;
+
+  return formattedDate;
+}
+
+// Helper function to get day suffix (st, nd, rd, th)
+function getDaySuffix(day) {
+  if (day >= 11 && day <= 13) {
+    return 'th';
+  }
+  switch (day % 10) {
+    case 1:
+      return 'st';
+    case 2:
+      return 'nd';
+    case 3:
+      return 'rd';
+    default:
+      return 'th';
+  }
+}
+
+// Helper function to pad numbers with leading zero
+function padZero(num) {
+  return num < 10 ? `0${num}` : num;
 }
 
 // Use browser locations to find the user's city
@@ -67,7 +144,7 @@ if ("geolocation" in navigator) {
             data.address.hamlet ||
             "Unknown";
           console.log("City: " + city);
-          
+
           // Call getWeatherData() here after obtaining the city
           getWeatherData(city)
             .then((weatherData) => {
@@ -107,7 +184,7 @@ if ("geolocation" in navigator) {
 function citySearch() {
   city = locationInput.value;
   if (city) {
-    weatherDataContainer.innerHTML = '<p>Loading...</p>';
+    weatherDataContainer.innerHTML = "<p>Loading...</p>";
     getWeatherData(city)
       .then((weatherData) => {
         const processedData = processWeatherData(weatherData);
@@ -116,17 +193,17 @@ function citySearch() {
         // Update the weatherDataContainer with the searched cities data
         if (processedData) {
           weatherDataContainer.innerHTML = `
-            <h2>Weather for ${processedData.location}</h2>
+            <h2>Weather for ${processedData.location}, ${weatherData.location.region}</h2>
             <p>Temperature: ${processedData.temperature}°C</p>
             <p>Condition: ${processedData.condition}</p>
           `;
         } else {
-          weatherDataContainer.innerHTML = 'Weather data not available.';
+          weatherDataContainer.innerHTML = "Weather data not available.";
         }
       })
       .catch((error) => {
         console.error("Error:", error.message);
-        weatherDataContainer.innerHTML = 'Error fetching weather data.';
+        weatherDataContainer.innerHTML = "Error fetching weather data.";
       });
   } else {
     console.log("Please enter a location.");
@@ -134,12 +211,24 @@ function citySearch() {
 }
 
 // Search button click event
-const searchButton = document.getElementById('searchButton');
-searchButton.addEventListener('click', citySearch);
+const searchButton = document.getElementById("searchButton");
+searchButton.addEventListener("click", citySearch);
 
 // Event listener for locationInput enter
-locationInput.addEventListener('keyup', function(event) {
-  if (event.key === 'Enter') {
+locationInput.addEventListener("keyup", function (event) {
+  if (event.key === "Enter") {
     citySearch();
+  }
+});
+
+// Remove placeholder text when the input is focused
+locationInput.addEventListener("focus", function () {
+  locationInput.removeAttribute("placeholder");
+});
+
+// Restore placeholder text when the input loses focus and is empty
+locationInput.addEventListener("blur", function () {
+  if (locationInput.value === "") {
+    locationInput.setAttribute("placeholder", "Search by city or coordinates");
   }
 });

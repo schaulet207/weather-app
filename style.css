@@ -484,50 +484,32 @@ h4{
 
 input#location {
     text-align: center;
-    width: 25vw;
-    height: 32px;
+    width: 20vw;
     padding: 20px 10px;
-    
-  }
-  
-input#location {
-    border: none;
     padding: 5px;
     height: 20px;
-    border-radius: 5px 0 0 5px;
+    border: none;
     border-top-left-radius: 0px;
     outline: none;
     font-family: 'Quicksand', sans-serif;
-    background: rgb(61, 61, 64);
+    background: transparent;
+    border-bottom: 3px solid white;
   }
   
-input#location:focus{
-    color: rgb(117, 117, 117);
-    background-color: black;
-    font-family: 'Quicksand', sans-serif;
-    border: 2px solid var(--purple);
-    transition-duration: .3s;
-  } 
-
-input#location:focus + #searchButton {
-    transition-duration: .3s;
-    height: 34px;
-  }
-
-input#location:hover:not(:focus) {
-    border: 1px solid rgb(88, 88, 90);
-  }
-
-input#location:hover:not(:focus) + #searchButton {
-    height: 32px;
-    transition-duration: .3s;
-  }
+  input#location::placeholder {
+    text-align: left; /* Align placeholder text to the left */
+    padding-left: 10px; /* Add left padding to the placeholder */
+}
 
 #searchButton {
+    scale: .8;
+    position: relative;
+    right: 38px;
+    top: 2px;
     width: 40px;
     height: 30px;
-    /* border: 1px solid #00B4CC; */
-    background: rgb(42, 42, 45);
+    border-bottom: 3px solid white;
+    background: transparent;
     text-align: center;
     color: #fff;
     border-radius: 0 5px 5px 0;
