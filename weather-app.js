@@ -1,6 +1,11 @@
 // Declare city globally
 var city;
 
+// Variables for HTML elements to allow searching cities
+var locationInput = document.getElementById('location');
+var weatherDataContainer = document.getElementById('weatherData');
+weatherDataContainer.innerHTML = '<p>Loading...</p>'; // Display loading message
+
 // Fetch weather data using targetLocation
 async function getWeatherData(targetLocation) {
   const apiKey = "5caa1bdd43874892b9b190358231308";
@@ -32,6 +37,12 @@ function processWeatherData(weatherData) {
     condition: weatherData.current.condition.text,
     currentTime: weatherData.location.localtime,
   };
+  weatherDataContainer.innerHTML = `
+  <h2>Weather for ${weatherData.location.name}</h2>
+  <p>Temperature: ${weatherData.current.temp_c}°C</p>
+  <p>Condition: ${weatherData.current.condition.text}</p>
+  <p> ${weatherData.location.localtime}</p>
+`;
 
   return processedData;
 }
@@ -91,3 +102,44 @@ if ("geolocation" in navigator) {
 } else {
   console.log("Geolocation is not available in this browser.");
 }
+
+// City search bar function
+function citySearch() {
+  city = locationInput.value;
+  if (city) {
+    weatherDataContainer.innerHTML = '<p>Loading...</p>';
+    getWeatherData(city)
+      .then((weatherData) => {
+        const processedData = processWeatherData(weatherData);
+        console.log("Processed Weather Data:", processedData);
+
+        // Update the weatherDataContainer with the searched cities data
+        if (processedData) {
+          weatherDataContainer.innerHTML = `
+            <h2>Weather for ${processedData.location}</h2>
+            <p>Temperature: ${processedData.temperature}°C</p>
+            <p>Condition: ${processedData.condition}</p>
+          `;
+        } else {
+          weatherDataContainer.innerHTML = 'Weather data not available.';
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error.message);
+        weatherDataContainer.innerHTML = 'Error fetching weather data.';
+      });
+  } else {
+    console.log("Please enter a location.");
+  }
+}
+
+// Search button click event
+const searchButton = document.getElementById('searchButton');
+searchButton.addEventListener('click', citySearch);
+
+// Event listener for locationInput enter
+locationInput.addEventListener('keyup', function(event) {
+  if (event.key === 'Enter') {
+    citySearch();
+  }
+});
