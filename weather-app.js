@@ -1,5 +1,6 @@
 // Declare city globally
 var city;
+var dayTime;
 
 // Variables for HTML elements to allow searching cities
 var locationInput = document.getElementById("location");
@@ -27,12 +28,28 @@ async function getWeatherData(targetLocation) {
 // Change the date-time string returned from weatherData.location.localtime to a more readable format
 function formatDate(apiDateString) {
   const months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
 
   const daysOfWeek = [
-    'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
   ];
 
   const date = new Date(apiDateString);
@@ -43,10 +60,12 @@ function formatDate(apiDateString) {
   const year = date.getFullYear();
   const hours = date.getHours();
   const minutes = date.getMinutes();
-  const period = hours >= 12 ? 'pm' : 'am';
+  const period = hours >= 12 ? "pm" : "am";
   const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
 
-  const formattedDate = `${dayOfWeek}, ${month} ${day}${getDaySuffix(day)} ${year} ${formattedHours}:${padZero(minutes)}${period}`;
+  const formattedDate = `${dayOfWeek}, ${month} ${day}${getDaySuffix(
+    day
+  )} ${year} ${formattedHours}:${padZero(minutes)}${period}`;
 
   return formattedDate;
 }
@@ -63,27 +82,68 @@ function processWeatherData(weatherData) {
     temperature: weatherData.current.temp_f,
     condition: weatherData.current.condition.text,
     currentTime: formatDate(weatherData.location.localtime), // Format the current time
+    dayTime: weatherData.current.is_day === 1 ? "day" : "night", // Determine if day or night
   };
 
+  // Set the global dayTime variable
+  dayTime = processedData.dayTime;
+
   weatherDataContainer.innerHTML = `
-    <h2>${processedData.currentTime}</h2>
-    <h1>${weatherData.location.name}, ${weatherData.location.region}</h1>
-    <p>Temperature: ${weatherData.current.temp_f}°F</p>
+    <h1 id="local">${weatherData.location.name}, ${weatherData.location.region}</h1>
+    <div id="time">
+      <h3>${processedData.currentTime}</h3>
+      <img id="dayNightImage" src="" alt="Day/Night Image">
+    </div>
+    <div id="temp">
+      <h1 id="degrees">${weatherData.current.temp_f}°F</h1>
+      <img id="thermometer" src="" alt="Thermometer Image">
+    </div>
     <p>Condition: ${weatherData.current.condition.text}</p>
   `;
+  // Update day/night image
+  dayNight(dayTime);
+  // Add the thermometer image
+  const thermometer = document.getElementById("thermometer");
+  thermometer.src = "/weather-app/img/thermometer.svg";
 
   return processedData;
+}
+
+// Update the day/night image based on dayTime
+function dayNight(dayTime) {
+  const dayNightImage = document.getElementById("dayNightImage");
+  if (dayTime === "day") {
+    dayNightImage.src = "/weather-app/img/sun.svg";
+  } else {
+    dayNightImage.src = "/weather-app/img/moon.svg";
+  }
 }
 
 // Helper function to format date and time
 function formatDate(apiDateString) {
   const months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
 
   const daysOfWeek = [
-    'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
   ];
 
   const date = new Date(apiDateString);
@@ -94,10 +154,12 @@ function formatDate(apiDateString) {
   const year = date.getFullYear();
   const hours = date.getHours();
   const minutes = date.getMinutes();
-  const period = hours >= 12 ? 'pm' : 'am';
+  const period = hours >= 12 ? "pm" : "am";
   const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
 
-  const formattedDate = `${dayOfWeek}, ${month} ${day}${getDaySuffix(day)} ${year} ${formattedHours}:${padZero(minutes)}${period}`;
+  const formattedDate = `${dayOfWeek}, ${month} ${day}${getDaySuffix(
+    day
+  )} ${year} | ${formattedHours}:${padZero(minutes)}${period}`;
 
   return formattedDate;
 }
@@ -105,17 +167,17 @@ function formatDate(apiDateString) {
 // Helper function to get day suffix (st, nd, rd, th)
 function getDaySuffix(day) {
   if (day >= 11 && day <= 13) {
-    return 'th';
+    return "th";
   }
   switch (day % 10) {
     case 1:
-      return 'st';
+      return "st";
     case 2:
-      return 'nd';
+      return "nd";
     case 3:
-      return 'rd';
+      return "rd";
     default:
-      return 'th';
+      return "th";
   }
 }
 
@@ -193,10 +255,22 @@ function citySearch() {
         // Update the weatherDataContainer with the searched cities data
         if (processedData) {
           weatherDataContainer.innerHTML = `
-            <h2>Weather for ${processedData.location}, ${weatherData.location.region}</h2>
-            <p>Temperature: ${processedData.temperature}°C</p>
-            <p>Condition: ${processedData.condition}</p>
-          `;
+          <h1 id="local">${weatherData.location.name}, ${weatherData.location.region}</h1>
+          <div id="time">
+            <h3>${processedData.currentTime}</h3>
+            <img id="dayNightImage" src="" alt="Day/Night Image">
+          </div>
+          <div id="temp">
+            <h1 id="degrees">${weatherData.current.temp_f}°F</h1>
+            <img id="thermometer" src="" alt="Thermometer Image">
+          </div>
+          <p>Condition: ${weatherData.current.condition.text}</p>
+        `;
+        // Update day/night image
+        dayNight(dayTime);
+        // Add the thermometer image
+        const thermometer = document.getElementById("thermometer");
+        thermometer.src = "/weather-app/img/thermometer.svg";
         } else {
           weatherDataContainer.innerHTML = "Weather data not available.";
         }

@@ -465,11 +465,46 @@ h4{
     color: white;
 }
 
-.main h1 {
+#local {
+    position: relative;
+    bottom: 10vh;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
+}
+
+#time {
+    position: relative;
+    bottom: 11vh;
+    left: 10px;
+    display: flex;
+    flex-direction: row;
+}
+
+#temp {
+    position: relative;
+    bottom: 11vh;
+    right: 10px;
+    display: flex;
+    flex-direction: row;
+}
+
+#dayNightImage {
+    position: relative;
+    left: 10px;
+    bottom: 4px;
+    scale: 0.75;
+}
+
+#thermometer {
+    position: relative;
+    left: 50px;
+    scale: 2.3;
+}
+
+#degrees {
+    font-size: 108px;
 }
 
 #weatherData {
@@ -480,11 +515,14 @@ h4{
     color: white;
 }
 
+
+
 /* City search bar */
 
 input#location {
     text-align: center;
     width: 20vw;
+    min-width: 220px;
     padding: 20px 10px;
     padding: 5px;
     height: 20px;
