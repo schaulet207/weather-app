@@ -467,7 +467,7 @@ h4{
 
 #local {
     position: relative;
-    bottom: 10vh;
+    bottom: 6vh;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -476,7 +476,7 @@ h4{
 
 #time {
     position: relative;
-    bottom: 11vh;
+    bottom: 7vh;
     left: 10px;
     display: flex;
     flex-direction: row;
@@ -561,7 +561,22 @@ input#location {
   }
   
   .citySearch {
+    position: relative;
+    left: 1vw;
     display: flex;
     flex-direction: row;
     justify-content: center;
+  }
+
+  .lrData {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  #conditionImage {
+    scale: 2.5;
+    position: relative;
+    bottom: 75px;
   }

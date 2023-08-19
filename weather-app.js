@@ -1,6 +1,12 @@
-// Declare city globally
+// Declare variables globally
 var city;
 var dayTime;
+var forecast;
+var sunset;
+var sunrise;
+var maxTemp;
+var conditionStatus;
+var humidity;
 
 // Variables for HTML elements to allow searching cities
 var locationInput = document.getElementById("location");
@@ -10,7 +16,7 @@ weatherDataContainer.innerHTML = "<p>Loading...</p>"; // Display loading message
 // Fetch weather data using targetLocation
 async function getWeatherData(targetLocation) {
   const apiKey = "5caa1bdd43874892b9b190358231308";
-  const apiUrl = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${targetLocation}`;
+  const apiUrl = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${targetLocation}&days=3&aqi=no&alerts=no`;
 
   try {
     const response = await fetch(apiUrl);
@@ -83,10 +89,18 @@ function processWeatherData(weatherData) {
     condition: weatherData.current.condition.text,
     currentTime: formatDate(weatherData.location.localtime), // Format the current time
     dayTime: weatherData.current.is_day === 1 ? "day" : "night", // Determine if day or night
+    maxTemp: weatherData.forecast.forecastday[0].day.maxtemp_f,
+    humidity: weatherData.current.humidity,
   };
 
-  // Set the global dayTime variable
+  // Set the variables needed globally
   dayTime = processedData.dayTime;
+  forecast = weatherData.forecast.forecastday;
+  sunset = weatherData.forecast.forecastday[0].astro.sunset;
+  sunrise = weatherData.forecast.forecastday[0].astro.sunrise;
+  conditionStatus = weatherData.current.condition.text;
+  maxTemp = weatherData.forecast.forecastday[0].day.maxtemp_f,
+  humidity = weatherData.current.humidity;
 
   weatherDataContainer.innerHTML = `
     <h1 id="local">${weatherData.location.name}, ${weatherData.location.region}</h1>
@@ -98,10 +112,20 @@ function processWeatherData(weatherData) {
       <h1 id="degrees">${weatherData.current.temp_f}°F</h1>
       <img id="thermometer" src="" alt="Thermometer Image">
     </div>
-    <p>Condition: ${weatherData.current.condition.text}</p>
+    <img id="conditionImage" src="" alt="Weather Condition Image">
+      <h2>${weatherData.current.condition.text}</h2>
+    <div class="lrData">
+      <p>Sunrise: ${sunrise}</p>
+      <p>Sunset: ${sunset}</p>
+    </div>
+    <div class="lrData">
+      <p>High of: ${maxTemp}°F</p>
+      <p>Humidity: ${humidity}%</p>
+    </div>
   `;
   // Update day/night image
   dayNight(dayTime);
+  conditionImage(conditionStatus);
   // Add the thermometer image
   const thermometer = document.getElementById("thermometer");
   thermometer.src = "/weather-app/img/thermometer.svg";
@@ -116,6 +140,64 @@ function dayNight(dayTime) {
     dayNightImage.src = "/weather-app/img/sun.svg";
   } else {
     dayNightImage.src = "/weather-app/img/moon.svg";
+  }
+}
+
+// Update the conditions image based on condition
+function conditionImage(conditionStatus) {
+  const conditionImage = document.getElementById("conditionImage");
+  switch (conditionStatus) {
+    case "Clear":
+    case "Sunny":
+    case "Fair":
+      conditionImage.src = "/weather-app/img/sun.svg";
+      console.log("1");
+      break;
+    case "Partly cloudy":
+    case "Mostly cloudy":
+    case "Cloudy":
+    case "Overcast":
+      conditionImage.src = "/weather-app/img/cloud.svg";
+      console.log("2");
+      break;
+    case "Light rain":
+    case "Patchy rain possible":
+    case "Patchy light rain":
+    case "Moderate rain at times":
+    case "Light freezing rain":
+    case "Moderate or heavy freezing rain":
+    case "Light rain shower":
+    case "Moderate or heavy rain shower":
+    case "Torrential rain shower":
+    case "Moderate rain":
+    case "Heavy rain":
+    case "Showers":
+      conditionImage.src = "/weather-app/img/rain.svg";
+      console.log("3");
+      break;
+    case "Light snow":
+    case "Light sleet":
+    case "Moderate snow":
+    case "Heavy snow":
+    case "Flurries":
+    case "Blizzard":
+    case "Patchy snow possible":
+    case "Patchy sleet possible":
+    case "Patchy freezing drizzle possible":
+    case "Blowing snow":
+    case "Light snow showers":
+    case "Patchy snow possible":
+      conditionImage.src = "/weather-app/img/snow.svg";
+      console.log("4");
+      break;
+    case "Mist":
+    case "Fog":
+    case "Haze":
+      conditionImage.src = "/weather-app/img/impaired.svg";
+      console.log("5");
+      break;
+    default:
+      conditionImage.src = "";
   }
 }
 
@@ -255,19 +337,29 @@ function citySearch() {
         // Update the weatherDataContainer with the searched cities data
         if (processedData) {
           weatherDataContainer.innerHTML = `
-          <h1 id="local">${weatherData.location.name}, ${weatherData.location.region}</h1>
-          <div id="time">
-            <h3>${processedData.currentTime}</h3>
-            <img id="dayNightImage" src="" alt="Day/Night Image">
-          </div>
-          <div id="temp">
-            <h1 id="degrees">${weatherData.current.temp_f}°F</h1>
-            <img id="thermometer" src="" alt="Thermometer Image">
-          </div>
-          <p>Condition: ${weatherData.current.condition.text}</p>
-        `;
+            <h1 id="local">${weatherData.location.name}, ${weatherData.location.region}</h1>
+            <div id="time">
+              <h3>${processedData.currentTime}</h3>
+              <img id="dayNightImage" src="" alt="Day/Night Image">
+            </div>
+            <div id="temp">
+              <h1 id="degrees">${weatherData.current.temp_f}°F</h1>
+              <img id="thermometer" src="" alt="Thermometer Image">
+            </div>
+            <img id="conditionImage" src="" alt="Weather Condition Image">
+              <h2>${weatherData.current.condition.text}</h2>
+            <div class="lrData">
+              <p>Sunrise: ${sunrise}</p>
+              <p>Sunset: ${sunset}</p>
+            </div>
+            <div class="lrData">
+              <p>High of: ${maxTemp}°F</p>
+              <p>Humidity: ${humidity}%</p>
+            </div>
+  `;
         // Update day/night image
         dayNight(dayTime);
+        conditionImage(conditionStatus);
         // Add the thermometer image
         const thermometer = document.getElementById("thermometer");
         thermometer.src = "/weather-app/img/thermometer.svg";
@@ -306,3 +398,5 @@ locationInput.addEventListener("blur", function () {
     locationInput.setAttribute("placeholder", "Search by city or coordinates");
   }
 });
+
+
