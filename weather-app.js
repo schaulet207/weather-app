@@ -7,6 +7,11 @@ var sunrise;
 var maxTemp;
 var conditionStatus;
 var humidity;
+var byHour;
+var unprocessedTime;
+var currentHour;
+var hourlyConditionsGlobal = [];
+var hourlyTempsGlobal = [];
 
 // Variables for HTML elements to allow searching cities
 var locationInput = document.getElementById("location");
@@ -91,6 +96,8 @@ function processWeatherData(weatherData) {
     dayTime: weatherData.current.is_day === 1 ? "day" : "night", // Determine if day or night
     maxTemp: weatherData.forecast.forecastday[0].day.maxtemp_f,
     humidity: weatherData.current.humidity,
+    hourlyForecasts: Array.from(weatherData.forecast.forecastday, day => day.hour),
+    timeData: weatherData.location.localtime,
   };
 
   // Set the variables needed globally
@@ -101,6 +108,9 @@ function processWeatherData(weatherData) {
   conditionStatus = weatherData.current.condition.text;
   maxTemp = weatherData.forecast.forecastday[0].day.maxtemp_f,
   humidity = weatherData.current.humidity;
+  byHour = processedData.hourlyForecasts;
+  timeData = weatherData.location.localtime;
+  currentHour = getHour(timeData);
 
   weatherDataContainer.innerHTML = `
     <h1 id="local">${weatherData.location.name}, ${weatherData.location.region}</h1>
@@ -123,9 +133,10 @@ function processWeatherData(weatherData) {
       <p>Humidity: ${humidity}%</p>
     </div>
   `;
-  // Update day/night image
+  // Update images
   dayNight(dayTime);
   conditionImage(conditionStatus);
+  getHourlyForecast(currentHour);
   // Add the thermometer image
   const thermometer = document.getElementById("thermometer");
   thermometer.src = "/weather-app/img/thermometer.svg";
@@ -199,6 +210,53 @@ function conditionImage(conditionStatus) {
     default:
       conditionImage.src = "";
   }
+}
+
+// Function to get the forecast for condition and temperature for the next six hours based on the current time
+function getHourlyForecast(currentHour) {
+  const hourlyConditions = [];
+  const hourlyTemps = [];
+  let forecastIndex = 0;
+
+  for (let hour = currentHour + 1; hour <= currentHour + 8; hour++) {
+    const condition = forecast[forecastIndex].hour[hour].condition.text;
+    const temperature = forecast[forecastIndex].hour[hour].temp_f;
+
+    hourlyConditions.push(condition);
+    hourlyTemps.push(temperature);
+
+    if (hour > 23 && forecastIndex === 0) {
+      forecastIndex = 1;
+      console.log("CURRENT HOUR " + currentHour);
+    }
+
+    hourlyConditionsGlobal = hourlyConditions;
+    hourlyTempsGlobal = hourlyTemps;
+  }
+}
+
+function getHourlyForecast(currentHour) {
+  const hourlyConditions = [];
+  const hourlyTemps = [];
+  let forecastIndex = 0;
+
+  for (let hour = currentHour + 1; hour <= currentHour + 8; hour++) {
+    const adjustedHour = hour % 24; // Adjust hour to be within 0-23 range
+    const condition = forecast[forecastIndex].hour[adjustedHour].condition.text;
+    const temperature = forecast[forecastIndex].hour[adjustedHour].temp_f;
+    console.log("ADJUSTED HOUR " + adjustedHour)
+    console.log("Hour " + hour)
+
+    hourlyConditions.push(condition);
+    hourlyTemps.push(temperature);
+
+    if (adjustedHour < currentHour && forecastIndex === 0) {
+      forecastIndex = 1;
+    }
+  }
+
+    hourlyConditionsGlobal = hourlyConditions;
+    hourlyTempsGlobal = hourlyTemps;
 }
 
 // Helper function to format date and time
@@ -398,5 +456,20 @@ locationInput.addEventListener("blur", function () {
     locationInput.setAttribute("placeholder", "Search by city or coordinates");
   }
 });
+
+// Function to get the hour from localtime in order to forecast based on current time
+function getHour(timeData) {
+  // Split the time string into an array of strings
+  const timeParts = timeData.split(" ");
+
+  // Get the hour string
+  const hourString = timeParts[1];
+
+  // Convert the hour string to an integer
+  const hour = parseInt(hourString, 10);
+
+  // Return the hour
+  return hour;
+}
 
 
