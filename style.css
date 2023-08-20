@@ -571,12 +571,32 @@ input#location {
   .lrData {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 20px;
   }
 
   #conditionImage {
     scale: 2.5;
     position: relative;
-    bottom: 75px;
+    bottom: 10vh;
+  }
+
+  .hour {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #hourly {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 40px;
+    padding-top: 25px;
+  }
+
+  #conditionHeader {
+    position: relative;
+    bottom: 15vh;
   }

@@ -12,6 +12,8 @@ var unprocessedTime;
 var currentHour;
 var hourlyConditionsGlobal = [];
 var hourlyTempsGlobal = [];
+var clockFormat;
+var amPm;
 
 // Variables for HTML elements to allow searching cities
 var locationInput = document.getElementById("location");
@@ -111,6 +113,9 @@ function processWeatherData(weatherData) {
   byHour = processedData.hourlyForecasts;
   timeData = weatherData.location.localtime;
   currentHour = getHour(timeData);
+  getHourlyForecast(currentHour);
+  displayHour = parseInt(currentHour);
+  convertTo12Hour(displayHour);
 
   weatherDataContainer.innerHTML = `
     <h1 id="local">${weatherData.location.name}, ${weatherData.location.region}</h1>
@@ -122,21 +127,58 @@ function processWeatherData(weatherData) {
       <h1 id="degrees">${weatherData.current.temp_f}°F</h1>
       <img id="thermometer" src="" alt="Thermometer Image">
     </div>
+    <h1 id="conditionHeader">${weatherData.current.condition.text}</h1>
     <img id="conditionImage" src="" alt="Weather Condition Image">
-      <h2>${weatherData.current.condition.text}</h2>
     <div class="lrData">
-      <p>Sunrise: ${sunrise}</p>
-      <p>Sunset: ${sunset}</p>
+      <h2>Sunrise: ${sunrise}</h2>
+      <h2>Sunset: ${sunset}</h2>
     </div>
     <div class="lrData">
-      <p>High of: ${maxTemp}°F</p>
-      <p>Humidity: ${humidity}%</p>
+      <h2>High of: ${maxTemp}°F</h2>
+      <h2>Humidity: ${humidity}%</h2>
     </div>
+    <div id="hourly">
+      <div class="hour">
+        <h2>${clockFormat + 1}${amPm}</h2>
+        <h3>${hourlyConditionsGlobal[1]}</h3>
+        <h3>${hourlyTempsGlobal[1]}°F</h3>
+      </div>
+      <div class="hour">
+        <h2>${clockFormat + 2}${amPm}</h2>
+        <h3>${hourlyConditionsGlobal[2]}</h3>
+        <h3>${hourlyTempsGlobal[2]}°F</h3>
+      </div>
+      <div class="hour">
+        <h2>${clockFormat + 3}${amPm}</h2>
+        <h3>${hourlyConditionsGlobal[3]}</h3>
+        <h3>${hourlyTempsGlobal[3]}°F</h3>
+      </div>
+      <div class="hour">
+        <h2>${clockFormat + 4}${amPm}</h2>
+        <h3>${hourlyConditionsGlobal[4]}</h3>
+        <h3>${hourlyTempsGlobal[4]}°F</h3>
+      </div>
+      <div class="hour">
+        <h2>${clockFormat + 5}${amPm}</h2>
+        <h3>${hourlyConditionsGlobal[5]}</h3>
+        <h3>${hourlyTempsGlobal[5]}°F</h3>
+        </div>
+      <div class="hour">
+        <h2>${clockFormat + 6}${amPm}</h2>
+        <h3>${hourlyConditionsGlobal[6]}</h3>
+        <h3>${hourlyTempsGlobal[6]}°F</h3>
+      </div>
+      <div class="hour">
+        <h2>${clockFormat + 7}${amPm}</h2>
+        <h3>${hourlyConditionsGlobal[7]}</h3>
+        <h3>${hourlyTempsGlobal[7]}°F</h3>
+      </div>
+    </div>
+
   `;
   // Update images
   dayNight(dayTime);
   conditionImage(conditionStatus);
-  getHourlyForecast(currentHour);
   // Add the thermometer image
   const thermometer = document.getElementById("thermometer");
   thermometer.src = "/weather-app/img/thermometer.svg";
@@ -162,14 +204,12 @@ function conditionImage(conditionStatus) {
     case "Sunny":
     case "Fair":
       conditionImage.src = "/weather-app/img/sun.svg";
-      console.log("1");
       break;
     case "Partly cloudy":
     case "Mostly cloudy":
     case "Cloudy":
     case "Overcast":
       conditionImage.src = "/weather-app/img/cloud.svg";
-      console.log("2");
       break;
     case "Light rain":
     case "Patchy rain possible":
@@ -184,7 +224,6 @@ function conditionImage(conditionStatus) {
     case "Heavy rain":
     case "Showers":
       conditionImage.src = "/weather-app/img/rain.svg";
-      console.log("3");
       break;
     case "Light snow":
     case "Light sleet":
@@ -199,42 +238,18 @@ function conditionImage(conditionStatus) {
     case "Light snow showers":
     case "Patchy snow possible":
       conditionImage.src = "/weather-app/img/snow.svg";
-      console.log("4");
       break;
     case "Mist":
     case "Fog":
     case "Haze":
       conditionImage.src = "/weather-app/img/impaired.svg";
-      console.log("5");
       break;
     default:
       conditionImage.src = "";
   }
 }
 
-// Function to get the forecast for condition and temperature for the next six hours based on the current time
-function getHourlyForecast(currentHour) {
-  const hourlyConditions = [];
-  const hourlyTemps = [];
-  let forecastIndex = 0;
-
-  for (let hour = currentHour + 1; hour <= currentHour + 8; hour++) {
-    const condition = forecast[forecastIndex].hour[hour].condition.text;
-    const temperature = forecast[forecastIndex].hour[hour].temp_f;
-
-    hourlyConditions.push(condition);
-    hourlyTemps.push(temperature);
-
-    if (hour > 23 && forecastIndex === 0) {
-      forecastIndex = 1;
-      console.log("CURRENT HOUR " + currentHour);
-    }
-
-    hourlyConditionsGlobal = hourlyConditions;
-    hourlyTempsGlobal = hourlyTemps;
-  }
-}
-
+// Function to get the forecast for condition and temperature for the next eight hours based on the current time, across more than one day
 function getHourlyForecast(currentHour) {
   const hourlyConditions = [];
   const hourlyTemps = [];
@@ -244,8 +259,6 @@ function getHourlyForecast(currentHour) {
     const adjustedHour = hour % 24; // Adjust hour to be within 0-23 range
     const condition = forecast[forecastIndex].hour[adjustedHour].condition.text;
     const temperature = forecast[forecastIndex].hour[adjustedHour].temp_f;
-    console.log("ADJUSTED HOUR " + adjustedHour)
-    console.log("Hour " + hour)
 
     hourlyConditions.push(condition);
     hourlyTemps.push(temperature);
@@ -325,6 +338,24 @@ function getDaySuffix(day) {
 function padZero(num) {
   return num < 10 ? `0${num}` : num;
 }
+
+// Helper function to convert forecast time from 24-hour to 12-hour format for displaying
+function convertTo12Hour(displayHour) {
+  if (displayHour === 0) {
+    clockFormat = 12;
+    amPm = "am";
+  }
+  else if (displayHour > 12) {
+    clockFormat = displayHour - 12;
+    amPm = "pm";
+  }
+  else {
+    clockFormat = displayHour;
+    amPm = "am";
+    return;
+  }
+}
+
 
 // Use browser locations to find the user's city
 if ("geolocation" in navigator) {
