@@ -14,6 +14,7 @@ var hourlyConditionsGlobal = [];
 var hourlyTempsGlobal = [];
 var clockFormat;
 var amPm;
+var forecastHour;
 
 // Variables for HTML elements to allow searching cities
 var locationInput = document.getElementById("location");
@@ -123,12 +124,16 @@ function processWeatherData(weatherData) {
       <h3>${processedData.currentTime}</h3>
       <img id="dayNightImage" src="" alt="Day/Night Image">
     </div>
-    <div id="temp">
-      <h1 id="degrees">${weatherData.current.temp_f}°F</h1>
-      <img id="thermometer" src="" alt="Thermometer Image">
+    <div id="tempAndConditions">
+      <div id="temp">
+        <h1 id="degrees">${weatherData.current.temp_f}°F</h1>
+        <img id="thermometer" src="" alt="Thermometer Image">
+      </div>
+      <div id="conditions">
+        <h1 id="conditionHeader">${weatherData.current.condition.text}</h1>
+        <img id="conditionImage0" src="" alt="Weather Condition Image">
+      </div>
     </div>
-    <h1 id="conditionHeader">${weatherData.current.condition.text}</h1>
-    <img id="conditionImage" src="" alt="Weather Condition Image">
     <div class="lrData">
       <h2>Sunrise: ${sunrise}</h2>
       <h2>Sunset: ${sunset}</h2>
@@ -141,36 +146,43 @@ function processWeatherData(weatherData) {
       <div class="hour">
         <h2>${clockFormat + 1}${amPm}</h2>
         <h3>${hourlyConditionsGlobal[1]}</h3>
+        <img id="conditionImage1" src="" alt="Forecast Condition Image">
         <h3>${hourlyTempsGlobal[1]}°F</h3>
       </div>
       <div class="hour">
         <h2>${clockFormat + 2}${amPm}</h2>
         <h3>${hourlyConditionsGlobal[2]}</h3>
+        <img id="conditionImage2" src="" alt="Forecast Condition Image">
         <h3>${hourlyTempsGlobal[2]}°F</h3>
       </div>
       <div class="hour">
         <h2>${clockFormat + 3}${amPm}</h2>
         <h3>${hourlyConditionsGlobal[3]}</h3>
+        <img id="conditionImage3" src="" alt="Forecast Condition Image">
         <h3>${hourlyTempsGlobal[3]}°F</h3>
       </div>
       <div class="hour">
         <h2>${clockFormat + 4}${amPm}</h2>
         <h3>${hourlyConditionsGlobal[4]}</h3>
+        <img id="conditionImage4" src="" alt="Forecast Condition Image">
         <h3>${hourlyTempsGlobal[4]}°F</h3>
       </div>
       <div class="hour">
         <h2>${clockFormat + 5}${amPm}</h2>
         <h3>${hourlyConditionsGlobal[5]}</h3>
+        <img id="conditionImage5" src="" alt="Forecast Condition Image">
         <h3>${hourlyTempsGlobal[5]}°F</h3>
         </div>
       <div class="hour">
         <h2>${clockFormat + 6}${amPm}</h2>
         <h3>${hourlyConditionsGlobal[6]}</h3>
+        <img id="conditionImage6" src="" alt="Forecast Condition Image">
         <h3>${hourlyTempsGlobal[6]}°F</h3>
       </div>
       <div class="hour">
         <h2>${clockFormat + 7}${amPm}</h2>
         <h3>${hourlyConditionsGlobal[7]}</h3>
+        <img id="conditionImage7" src="" alt="Forecast Condition Image">
         <h3>${hourlyTempsGlobal[7]}°F</h3>
       </div>
     </div>
@@ -179,6 +191,7 @@ function processWeatherData(weatherData) {
   // Update images
   dayNight(dayTime);
   conditionImage(conditionStatus);
+  forecastImage(hourlyConditionsGlobal);
   // Add the thermometer image
   const thermometer = document.getElementById("thermometer");
   thermometer.src = "/weather-app/img/thermometer.svg";
@@ -198,7 +211,7 @@ function dayNight(dayTime) {
 
 // Update the conditions image based on condition
 function conditionImage(conditionStatus) {
-  const conditionImage = document.getElementById("conditionImage");
+  const conditionImage = document.getElementById(`conditionImage0`);
   switch (conditionStatus) {
     case "Clear":
     case "Sunny":
@@ -247,6 +260,62 @@ function conditionImage(conditionStatus) {
     default:
       conditionImage.src = "";
   }
+}
+
+// Now update the forecast conditions image based on condition
+function forecastImage(hourlyConditionsGlobal) {
+  let loopIndex = 1;
+    for (i = 1; i < 8; i++) {
+    let conditionImage = document.getElementById(`conditionImage${i}`);
+    switch (hourlyConditionsGlobal[i]) {
+      case "Clear":
+      case "Sunny":
+      case "Fair":
+        conditionImage.src = "/weather-app/img/sun.svg";
+        break;
+      case "Partly cloudy":
+      case "Mostly cloudy":
+      case "Cloudy":
+      case "Overcast":
+        conditionImage.src = "/weather-app/img/cloud.svg";
+        break;
+      case "Light rain":
+      case "Patchy rain possible":
+      case "Patchy light rain":
+      case "Moderate rain at times":
+      case "Light freezing rain":
+      case "Moderate or heavy freezing rain":
+      case "Light rain shower":
+      case "Moderate or heavy rain shower":
+      case "Torrential rain shower":
+      case "Moderate rain":
+      case "Heavy rain":
+      case "Showers":
+        conditionImage.src = "/weather-app/img/rain.svg";
+        break;
+      case "Light snow":
+      case "Light sleet":
+      case "Moderate snow":
+      case "Heavy snow":
+      case "Flurries":
+      case "Blizzard":
+      case "Patchy snow possible":
+      case "Patchy sleet possible":
+      case "Patchy freezing drizzle possible":
+      case "Blowing snow":
+      case "Light snow showers":
+      case "Patchy snow possible":
+        conditionImage.src = "/weather-app/img/snow.svg";
+        break;
+      case "Mist":
+      case "Fog":
+      case "Haze":
+        conditionImage.src = "/weather-app/img/impaired.svg";
+        break;
+      default:
+        conditionImage.src = "";
+    }
+    }
 }
 
 // Function to get the forecast for condition and temperature for the next eight hours based on the current time, across more than one day
@@ -355,7 +424,6 @@ function convertTo12Hour(displayHour) {
     return;
   }
 }
-
 
 // Use browser locations to find the user's city
 if ("geolocation" in navigator) {

@@ -467,7 +467,7 @@ h4{
 
 #local {
     position: relative;
-    bottom: 6vh;
+    bottom: 2vh;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -476,25 +476,38 @@ h4{
 
 #time {
     position: relative;
-    bottom: 7vh;
+    bottom: 4vh;
     left: 10px;
     display: flex;
     flex-direction: row;
 }
 
 #temp {
-    position: relative;
-    bottom: 11vh;
-    right: 10px;
     display: flex;
     flex-direction: row;
+    justify-content: center;
+}
+
+#conditions {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 4vw;
+}
+
+#tempAndConditions {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 9vw;
 }
 
 #dayNightImage {
     position: relative;
     left: 10px;
     bottom: 4px;
-    scale: 0.75;
+    scale: 0.6;
 }
 
 #thermometer {
@@ -575,10 +588,10 @@ input#location {
     gap: 20px;
   }
 
-  #conditionImage {
-    scale: 2.5;
+  #conditionImage0 {
     position: relative;
-    bottom: 10vh;
+    bottom: 7px;
+    scale: 2;
   }
 
   .hour {
@@ -594,9 +607,4 @@ input#location {
     justify-content: center;
     gap: 40px;
     padding-top: 25px;
-  }
-
-  #conditionHeader {
-    position: relative;
-    bottom: 15vh;
   }
