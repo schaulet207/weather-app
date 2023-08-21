@@ -501,6 +501,8 @@ h4{
     flex-direction: row;
     justify-content: center;
     gap: 9vw;
+    position: relative;
+    bottom: 2vh;
 }
 
 #dayNightImage {
@@ -536,6 +538,7 @@ input#location {
     text-align: center;
     width: 20vw;
     min-width: 220px;
+    max-width: 280px;
     padding: 20px 10px;
     padding: 5px;
     height: 20px;
@@ -576,6 +579,7 @@ input#location {
   .citySearch {
     position: relative;
     left: 1vw;
+    bottom: 73vh;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -607,4 +611,13 @@ input#location {
     justify-content: center;
     gap: 40px;
     padding-top: 25px;
+  }
+
+  .hour, .lrData {
+    position: relative;
+    bottom: 5vh;
+  }
+
+  .purp {
+    color: var(--purple);
   }

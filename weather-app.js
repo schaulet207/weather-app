@@ -135,52 +135,52 @@ function processWeatherData(weatherData) {
       </div>
     </div>
     <div class="lrData">
-      <h2>Sunrise: ${sunrise}</h2>
-      <h2>Sunset: ${sunset}</h2>
+      <h2>Sunrise: </h2><h2 class="purp">${sunrise}</h2>
+      <h2>Sunset: </h2><h2 class="purp">${sunset}</h2>
     </div>
     <div class="lrData">
-      <h2>High of: ${maxTemp}°F</h2>
-      <h2>Humidity: ${humidity}%</h2>
+      <h2>High of: </h2><h2 class="purp">${maxTemp}°F</h2>
+      <h2>Humidity: </h2><h2 class="purp">${humidity}%</h2>
     </div>
     <div id="hourly">
       <div class="hour">
-        <h2>${clockFormat + 1}${amPm}</h2>
+        <h2 class="purp">${clockFormat + 1}${amPm}</h2>
         <h3>${hourlyConditionsGlobal[1]}</h3>
         <img id="conditionImage1" src="" alt="Forecast Condition Image">
         <h3>${hourlyTempsGlobal[1]}°F</h3>
       </div>
       <div class="hour">
-        <h2>${clockFormat + 2}${amPm}</h2>
+        <h2 class="purp">${clockFormat + 2}${amPm}</h2>
         <h3>${hourlyConditionsGlobal[2]}</h3>
         <img id="conditionImage2" src="" alt="Forecast Condition Image">
         <h3>${hourlyTempsGlobal[2]}°F</h3>
       </div>
       <div class="hour">
-        <h2>${clockFormat + 3}${amPm}</h2>
+        <h2 class="purp">${clockFormat + 3}${amPm}</h2>
         <h3>${hourlyConditionsGlobal[3]}</h3>
         <img id="conditionImage3" src="" alt="Forecast Condition Image">
         <h3>${hourlyTempsGlobal[3]}°F</h3>
       </div>
       <div class="hour">
-        <h2>${clockFormat + 4}${amPm}</h2>
+        <h2 class="purp">${clockFormat + 4}${amPm}</h2>
         <h3>${hourlyConditionsGlobal[4]}</h3>
         <img id="conditionImage4" src="" alt="Forecast Condition Image">
         <h3>${hourlyTempsGlobal[4]}°F</h3>
       </div>
       <div class="hour">
-        <h2>${clockFormat + 5}${amPm}</h2>
+        <h2 class="purp">${clockFormat + 5}${amPm}</h2>
         <h3>${hourlyConditionsGlobal[5]}</h3>
         <img id="conditionImage5" src="" alt="Forecast Condition Image">
         <h3>${hourlyTempsGlobal[5]}°F</h3>
         </div>
       <div class="hour">
-        <h2>${clockFormat + 6}${amPm}</h2>
+        <h2 class="purp">${clockFormat + 6}${amPm}</h2>
         <h3>${hourlyConditionsGlobal[6]}</h3>
         <img id="conditionImage6" src="" alt="Forecast Condition Image">
         <h3>${hourlyTempsGlobal[6]}°F</h3>
       </div>
       <div class="hour">
-        <h2>${clockFormat + 7}${amPm}</h2>
+        <h2 class="purp">${clockFormat + 7}${amPm}</h2>
         <h3>${hourlyConditionsGlobal[7]}</h3>
         <img id="conditionImage7" src="" alt="Forecast Condition Image">
         <h3>${hourlyTempsGlobal[7]}°F</h3>
