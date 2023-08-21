@@ -494,32 +494,82 @@ function citySearch() {
         // Update the weatherDataContainer with the searched cities data
         if (processedData) {
           weatherDataContainer.innerHTML = `
-            <h1 id="local">${weatherData.location.name}, ${weatherData.location.region}</h1>
-            <div id="time">
-              <h3>${processedData.currentTime}</h3>
-              <img id="dayNightImage" src="" alt="Day/Night Image">
-            </div>
-            <div id="temp">
-              <h1 id="degrees">${weatherData.current.temp_f}°F</h1>
-              <img id="thermometer" src="" alt="Thermometer Image">
-            </div>
-            <img id="conditionImage" src="" alt="Weather Condition Image">
-              <h2>${weatherData.current.condition.text}</h2>
-            <div class="lrData">
-              <p>Sunrise: ${sunrise}</p>
-              <p>Sunset: ${sunset}</p>
-            </div>
-            <div class="lrData">
-              <p>High of: ${maxTemp}°F</p>
-              <p>Humidity: ${humidity}%</p>
-            </div>
+    <h1 id="local">${weatherData.location.name}, ${weatherData.location.region}</h1>
+    <div id="time">
+      <h3>${processedData.currentTime}</h3>
+      <img id="dayNightImage" src="" alt="Day/Night Image">
+    </div>
+    <div id="tempAndConditions">
+      <div id="temp">
+        <h1 id="degrees">${weatherData.current.temp_f}°F</h1>
+        <img id="thermometer" src="" alt="Thermometer Image">
+      </div>
+      <div id="conditions">
+        <h1 id="conditionHeader">${weatherData.current.condition.text}</h1>
+        <img id="conditionImage0" src="" alt="Weather Condition Image">
+      </div>
+    </div>
+    <div class="lrData">
+      <h2>Sunrise: </h2><h2 class="purp">${sunrise}</h2>
+      <h2>Sunset: </h2><h2 class="purp">${sunset}</h2>
+    </div>
+    <div class="lrData">
+      <h2>High of: </h2><h2 class="purp">${maxTemp}°F</h2>
+      <h2>Humidity: </h2><h2 class="purp">${humidity}%</h2>
+    </div>
+    <div id="hourly">
+      <div class="hour">
+        <h2 class="purp">${clockFormat + 1}${amPm}</h2>
+        <h3>${hourlyConditionsGlobal[1]}</h3>
+        <img id="conditionImage1" src="" alt="Forecast Condition Image">
+        <h3>${hourlyTempsGlobal[1]}°F</h3>
+      </div>
+      <div class="hour">
+        <h2 class="purp">${clockFormat + 2}${amPm}</h2>
+        <h3>${hourlyConditionsGlobal[2]}</h3>
+        <img id="conditionImage2" src="" alt="Forecast Condition Image">
+        <h3>${hourlyTempsGlobal[2]}°F</h3>
+      </div>
+      <div class="hour">
+        <h2 class="purp">${clockFormat + 3}${amPm}</h2>
+        <h3>${hourlyConditionsGlobal[3]}</h3>
+        <img id="conditionImage3" src="" alt="Forecast Condition Image">
+        <h3>${hourlyTempsGlobal[3]}°F</h3>
+      </div>
+      <div class="hour">
+        <h2 class="purp">${clockFormat + 4}${amPm}</h2>
+        <h3>${hourlyConditionsGlobal[4]}</h3>
+        <img id="conditionImage4" src="" alt="Forecast Condition Image">
+        <h3>${hourlyTempsGlobal[4]}°F</h3>
+      </div>
+      <div class="hour">
+        <h2 class="purp">${clockFormat + 5}${amPm}</h2>
+        <h3>${hourlyConditionsGlobal[5]}</h3>
+        <img id="conditionImage5" src="" alt="Forecast Condition Image">
+        <h3>${hourlyTempsGlobal[5]}°F</h3>
+        </div>
+      <div class="hour">
+        <h2 class="purp">${clockFormat + 6}${amPm}</h2>
+        <h3>${hourlyConditionsGlobal[6]}</h3>
+        <img id="conditionImage6" src="" alt="Forecast Condition Image">
+        <h3>${hourlyTempsGlobal[6]}°F</h3>
+      </div>
+      <div class="hour">
+        <h2 class="purp">${clockFormat + 7}${amPm}</h2>
+        <h3>${hourlyConditionsGlobal[7]}</h3>
+        <img id="conditionImage7" src="" alt="Forecast Condition Image">
+        <h3>${hourlyTempsGlobal[7]}°F</h3>
+      </div>
+    </div>
+
   `;
-        // Update day/night image
-        dayNight(dayTime);
-        conditionImage(conditionStatus);
-        // Add the thermometer image
-        const thermometer = document.getElementById("thermometer");
-        thermometer.src = "/weather-app/img/thermometer.svg";
+          // Update images
+          dayNight(dayTime);
+          conditionImage(conditionStatus);
+          forecastImage(hourlyConditionsGlobal);
+          // Add the thermometer image
+          const thermometer = document.getElementById("thermometer");
+          thermometer.src = "/weather-app/img/thermometer.svg";
         } else {
           weatherDataContainer.innerHTML = "Weather data not available.";
         }
