@@ -73,14 +73,24 @@
             </div>
 
             <div class="main">
+                <div id="topSection">
+                    <div class="arrows">
+                        <img src="img/arrow_back.svg" alt="Back arrow" id="back">
+                        <button id="yesterday">Yesterday</button>
+                    </div>
+                    <div class="citySearch">
+                        <input type="text" id="location" placeholder="Search by city or coordinates">
+                        <button id="searchButton"></button>
+                    </div>
+                    <div class="arrows">
+                        <button id="tomorrow">Tomorrow</button>
+                        <img src="img/arrow_forward.svg" alt="Forward arrow" id="forward">
+                    </div>
+                </div>
                 <div class="days">
                     <div id="yesterdaysData"></div>
                     <div id="weatherData"></div>
                     <div id="tomorrowsData"></div>
-                </div>
-                <div class="citySearch">
-                    <input type="text" id="location" placeholder="Search by city or coordinates">
-                    <button id="searchButton"></button>
                 </div>
                 <div id="hourlyForecast"></div>
             </div>

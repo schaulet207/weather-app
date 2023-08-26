@@ -578,11 +578,12 @@ input#location {
   
   .citySearch {
     position: relative;
-    left: 1vw;
-    bottom: 73vh;
+    top: 5vh;
     display: flex;
     flex-direction: row;
     justify-content: center;
+    align-items: flex-start;
+    height: 30px;
   }
 
   .lrData {
@@ -620,4 +621,59 @@ input#location {
 
   .purp {
     color: var(--purple);
+  }
+
+  /* BUTTON BAR */
+  #topSection {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 5vw;
+    margin-right: 5vw;
+  }
+
+  #yesterday {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    background-color: transparent;
+    border-color: transparent;
+    color: white;
+    font: var(--txt);
+  }
+
+  #tomorrow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    background-color: transparent;
+    border-color: transparent;
+    color: white;
+    font: var(--txt);
+  }
+
+  .arrows {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    position: relative;
+    top: 5.3vh;
+    width: 160px;
+    height: 50px;
+    background-color: transparent;
+    border: 1px solid var(--purple);
+    border-radius: 7px;
+  }
+
+  .arrows:hover, #yesterday:hover, #tomorrow:hover {
+    cursor: pointer;
+  }
+
+  #back, #forward {
+    height: 30px;
+    width: 30px;
   }
