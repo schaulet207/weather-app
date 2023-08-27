@@ -655,13 +655,16 @@ input#location {
     font: var(--txt);
   }
 
+  #back, #forward {
+    border: none;
+    padding: 5px;
+  }
+
   .arrows {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    position: relative;
-    top: 5.3vh;
     width: 160px;
     height: 50px;
     background-color: transparent;
@@ -669,11 +672,29 @@ input#location {
     border-radius: 7px;
   }
 
-  .arrows:hover, #yesterday:hover, #tomorrow:hover {
+  .arrows:hover {
     cursor: pointer;
+    border: 1px solid blue;
   }
 
   #back, #forward {
     height: 30px;
     width: 30px;
+  }
+
+  .arrows:hover {
+    background-color: var(--purple);
+    color: var(--dark-bg);
+  }
+
+  .arrows:hover #yesterday {
+    color: var(--dark-bg);
+  }
+
+  .arrows:hover #tomorrow {
+    color: var(--dark-bg);
+  }
+
+  .arrowL {
+    visibility: hidden;
   }

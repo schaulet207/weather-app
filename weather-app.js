@@ -621,4 +621,23 @@ function getHour(timeData) {
   return hour;
 }
 
+// Functions to hide the arrows if forecasts for those days are not available
+function hideYesterday() {
+  const element = document.querySelector(".arrowL");
+  element.style.visibility = "hidden";
+}
 
+function showYesterday() {
+  const element = document.querySelector(".arrowL");
+  element.style.visibility = "";
+}
+
+function hideTomorrow() {
+  const element = document.querySelector(".arrowR");
+  element.style.visibility = "hidden";
+}
+
+function showTomorrow() {
+  const element = document.querySelector(".arrowR");
+  element.style.visibility = "";
+}
