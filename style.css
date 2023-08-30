@@ -467,7 +467,7 @@ h4{
 
 #local {
     position: relative;
-    bottom: 2vh;
+    bottom: 20px;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -476,7 +476,7 @@ h4{
 
 #time {
     position: relative;
-    bottom: 4vh;
+    bottom: 50px;
     left: 10px;
     display: flex;
     flex-direction: row;
@@ -520,6 +520,7 @@ h4{
 
 #degrees {
     font-size: 108px;
+    min-width: 369px;
 }
 
 #weatherData {
@@ -578,7 +579,7 @@ input#location {
   
   .citySearch {
     position: relative;
-    top: 5vh;
+    top: 5px;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -695,6 +696,3 @@ input#location {
     color: var(--dark-bg);
   }
 
-  .arrowL {
-    visibility: hidden;
-  }
