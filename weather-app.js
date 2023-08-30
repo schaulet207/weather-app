@@ -734,12 +734,20 @@ function showYesterday() {
 
 function hideTomorrow() {
   const element = document.querySelector(".arrowR");
-  element.style.display = "hidden";
+  const forward = document.querySelector("#forward");
+  const forwardArrow = document.querySelector("#forwardArrow");
+  element.style.visibility = "hidden";
+  forward.style.visibility = "hidden";
+  forwardArrow.style.visibility = "hidden";
 }
 
 function showTomorrow() {
   const element = document.querySelector(".arrowR");
+  const forward = document.querySelector("#forward");
+  const forwardArrow = document.querySelector("#forwardArrow");
   element.style.visibility = "visible";
+  forward.style.visibility = "visible";
+  forwardArrow.style.visibility = "visible";
 }
 
 // Function to determine whether or not to hide the yesterday button
@@ -766,7 +774,7 @@ function forecastData(dayForecast) {
     weatherDataContainer.innerHTML = `
       <h1 id="local">${area}, ${localRegion}</h1>
       <div id="time">
-        <h3>12:00pm</h3>
+        <h3>Tomorrow at 12:00pm</h3>
         <img id="dayNightImage" src="/weather-app/img/sun.svg" alt="Day/Night Image">
       </div>
       <div id="tempAndConditions">
@@ -843,7 +851,7 @@ function forecastData(dayForecast) {
     weatherDataContainer.innerHTML = `
       <h1 id="local">${area}, ${localRegion}</h1>
       <div id="time">
-        <h3>12:00pm</h3>
+        <h3>Day after Tomorrow at 12:00pm</h3>
         <img id="dayNightImage" src="/weather-app/img/sun.svg" alt="Day/Night Image">
       </div>
       <div id="tempAndConditions">
@@ -915,6 +923,7 @@ function forecastData(dayForecast) {
     thermometer.src = "/weather-app/img/thermometer.svg";
     // Update conditions
     updateConditions();
+    hideTomorrowButton(dayForecast);
   }
   else if (dayForecast === 0) {
     weatherDataContainer.innerHTML = `
@@ -1116,6 +1125,8 @@ function updateHour() {
       hour.innerHTML = "6pm";
     } else if (hour.innerHTML == '19am') {
       hour.innerHTML = "7pm";
+    } else if ((currentHour > 12) && (hour.innerHTML == '12pm')){
+      hour.innerHTML = "12am";
     }
   }
 }
